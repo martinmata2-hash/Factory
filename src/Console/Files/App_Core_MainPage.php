@@ -10,7 +10,7 @@ namespace App\Core;
 
 use App\Core\Access;
 use App\Core\Menu;
-use App\Core\Pages;
+use App\Core\Archivos;
 
 use Marve\Ela\Core\CurrentUser;
 use Marve\Ela\Core\Session;
@@ -91,7 +91,7 @@ class MainPage implements PageInterface
         $this->MENUCLASS->setPage($landingPage);
         
         
-        $PAGINAS = new Pages();
+        $PAGINAS = new Archivos();
         foreach ($this->accessList as $permiso) 
         {            
             $this->pages[] = $PAGINAS->get($permiso,"ArcID");
@@ -155,13 +155,13 @@ class MainPage implements PageInterface
         <script src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.14.1/jquery-ui.min.js'></script>
 
 
-        <link href='/vendor/marve/ela/src/Grid/css/ui.jqgrid.css' rel='stylesheet' type='text/css' media='screen'>
+        <link href='/vendor/marve/grid/src/css/ui.jqgrid.css' rel='stylesheet' type='text/css' media='screen'>
         <!-- EL orden de locale-es.js debe de ser antes de jqGrid -->
-        <script src='/vendor/marve/ela/src/Grid/js/i18n/grid.locale-es.js' type='text/javascript'></script>
-        <script src='/vendor/marve/ela/src/Grid/js/jquery.jqGrid.min.js' type='text/javascript'></script>
+        <script src='/vendor/marve/grid/src/js/i18n/grid.locale-es.js' type='text/javascript'></script>
+        <script src='/vendor/marve/grid/src/js/jquery.jqGrid.min.js' type='text/javascript'></script>
 
 
-        <link href='/vendor/marve/ela/src/Grid/css/themes/redmond/jquery-ui.custom.css' rel='stylesheet' type='text/css'
+        <link href='/vendor/marve/grid/src/css/themes/redmond/jquery-ui.custom.css' rel='stylesheet' type='text/css'
             media='screen' />
         <link href='/Dashboard/css/grid-overwrite.css' rel='stylesheet' type='text/css' media='screen'>
 
@@ -471,10 +471,10 @@ class MainPage implements PageInterface
         <script src='/Dashboard/js/funsiones.js'></script>		        
         <script src='/Dashboard/js/Colorbox/jquery.colorbox.js'></script>
         <!--
-        <script	src='/vendor/marve/ela/src/Grid/css/themes/jquery-ui.custom.min.js'
+        <script	src='/vendor/marve/grid/src/css/themes/jquery-ui.custom.min.js'
                 type='text/javascript'></script>
         -->
-        <script type='text/javascript' src='/vendor/marve/ela/src/Grid/js/datepicker-es.js'></script>
+        <script type='text/javascript' src='/vendor/marve/grid/src/js/datepicker-es.js'></script>
         <script src='/Dashboard/js/jquery.easing.min.js'></script>
         <script src='/Dashboard/js/bootsrap.min.js'></script>
 

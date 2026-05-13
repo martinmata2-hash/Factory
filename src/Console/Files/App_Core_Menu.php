@@ -5,7 +5,7 @@ use Marve\Ela\Core\DotEnv;
 use Marve\Ela\Core\Generic;
 use Marve\Ela\Core\Session;
 
-class Menu extends Pages
+class Menu extends Archivos
 {
     /**
      * modulos

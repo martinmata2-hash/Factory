@@ -27,7 +27,7 @@ class Setup implements ConsoleInterface
         {
 			if (!$commandFile->isFile()) 
             {
-				continue;
+				continue;   
 			}
             $archivo = str_replace("_","/",$commandFile->getFilename());
             $class = file_get_contents(__DIR__."/../Files/".$commandFile->getFilename());   
@@ -60,4 +60,3 @@ class Setup implements ConsoleInterface
         return file_put_contents($filepath, $data, $flags);
     }        
 }
-

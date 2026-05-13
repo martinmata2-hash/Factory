@@ -44,13 +44,18 @@ if($LOGED->isLoged())
     if(CurrentUser::isAdmin())
     {
           /*************** Admin **/
-          //include_once($inicio."App/Core/Routes/Admin.php");                
+          include_once($inicio."App/Core/Routes/Admin.php");                
     }
     /***************** Supervisor */                
     if(CurrentUser::isSupervisor())
     {
          /************ Reportes  **/
      //include_once($inicio."App/Core/Routes/Reportes.php");
+    }
+     if(CurrentUser::isSuperAdmin())
+    {
+        $APP->router->get("/Archivos",       $inicio."App/Views/Admin/Archivos.php");
+        $APP->router->post("/Archivos",       $inicio."App/Views/Admin/Archivos.php");        
     }
     
     $APP->router->get("/Salir",       $inicio."Salir.php");        

@@ -79,7 +79,7 @@ class Users
         $FORMA->add($CLAVE);
             $ROL = new Select();
             $ROL->fields("UsuRol","UsuRol","Función")
-            ->fromDB(CurrentUser::getDb(),"rol", "RolNombre","RolID","0","RolID > ".Session::getRol());
+            ->fromDB(CurrentUser::getDb(),"rol", "RolNombre","RolID","0","RolID > ".CurrentUser::getRol());
         $FORMA->add($ROL);
         return $FORMA->render();
     }

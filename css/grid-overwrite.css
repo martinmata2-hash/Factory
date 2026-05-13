@@ -1,0 +1,53 @@
+.ui-jqgrid tr.jqgrow td
+
+{
+
+vertical-align: top;
+
+white-space: normal !important;
+
+padding:2px 5px;
+
+}
+
+
+.ui-widget-content a
+{
+    color:blue;
+}
+
+.selectopts
+
+{
+
+	margin: 0 0 1rem !important;
+
+}
+
+
+
+.ui-helper-clearfix::after {
+
+    clear:none !important;
+
+}
+
+
+
+.ui-widget {
+
+    font-family: Helvetica,Arial,sans-serif;
+
+    font-size: .85em !important;
+
+}
+
+
+
+#colchooser_list1, #colchooser_list2, #colchooser_list3 
+
+{
+
+	    padding: .5em 10em 1em 1em !important;
+
+}
