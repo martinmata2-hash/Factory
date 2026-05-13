@@ -65,8 +65,7 @@ class Login extends User
         /**
          * *** Aqui se pueden agregar otros valores necesarios en session ******
          */
-        return true;
-            
+        return true;            
     }
     
     /**
@@ -76,8 +75,8 @@ class Login extends User
     private function sessionBegin()
     {
         $data = new stdClass();
-        $data->session_id = session_id();
-        return ($this->edit($data, $this->data->UsuID, "UsuID") !== 0);
+        $data->session_id = session_id();        
+        return ($this->updateDirect($data, $this->data->UsuID, "UsuID") !== 0);
     }
     
     private function rememberme()
@@ -85,7 +84,8 @@ class Login extends User
         $token = Encode::createPass(24);
         $data = new stdClass();
         $data->UsuToken = $token;
-        $this->edit($data, $this->data->UsuID, "UsuID");
+        $data->session_id = session_id();        
+        $this->updateDirect($data, $this->data->UsuID, "UsuID");
         
         Cookie::Remove("auth",$this->cookieoptions);
         Cookie::Remove("usrtoken",$this->cookieoptions);
@@ -106,7 +106,7 @@ class Login extends User
         $data = new stdClass();
         $data->session_id = 0;
         $data->token = 0;
-        $this->edit($data, $id, "UsuID");
+        $this->updateDirect($data, $id, "UsuID");
         Cookie::Remove("auth",$this->cookieoptions);
         Cookie::Remove("usrtoken",$this->cookieoptions);
         CurrentUser::remove("CSRF");
@@ -125,7 +125,7 @@ class Login extends User
         {
             $datos = new stdClass();
             $datos->UsuActivo = POS_ACTIVO;       
-            return $this->edit($datos, $uid, "UsuID");
+            return $this->updateDirect($datos, $uid, "UsuID");
         }
         return 0;
     }

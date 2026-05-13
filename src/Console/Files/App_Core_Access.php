@@ -1,15 +1,14 @@
 <?php
 namespace App\Core;
-
 use App\Enum\Permiso;
-use App\Models\Data\AccessD;
+use App\Models\Data\PoliciesD;
 use Marve\Ela\Core\CurrentUser;
 use Marve\Ela\Core\DotEnv;
 use Marve\Ela\Core\Generic;
 use Marve\Ela\Core\Model;
 use Marve\Ela\Interfaces\MiddlewareHandleInterface;
-use Marve\Ela\MySql\Interfaces\DatabaseInterface;
-use stdClass;
+
+
 
 class Access extends Model implements MiddlewareHandleInterface
 {
@@ -47,6 +46,7 @@ class Access extends Model implements MiddlewareHandleInterface
     
     public function permission($pagina)
     {        
+        $pages = [];
         $access = $this->get(CurrentUser::getId(),"PusUsuario");
         if($access !== 0)
         $pages = explode(",", $access->PusPermisos);
@@ -57,17 +57,19 @@ class Access extends Model implements MiddlewareHandleInterface
         else return false;
     }
     
-    public function addEdit($usuario, Permiso $permiso)
-    {
-        $PERMISOS = new Generic(CurrentUser::getDb(), "permisosespeciales");
-        $permisos = $PERMISOS->get($usuario,"PerUsuario");        
+    public function addEdit(int $usuario, string $archivo, Permiso $permiso)
+    {        
+        $PERMISOS = new Policies(CurrentUser::getDb());
+        $permisos = $PERMISOS->get("0","","PolUsuario = $usuario AND PolFile = '$archivo'")[0]?? new PoliciesD();          
+        return $permiso->value <= $permisos->PolPolicy;  
         return match ($permiso) 
         {
-             Permiso::Agregar => $permisos->PerAdd == 1,
-             Permiso::Editar => $permisos->PerEdit == 1,
-             default => false
-             
-        };        
+            Permiso::Eliminar => $permisos->PolPolicy == 1,
+            Permiso::Editar => $permisos->PolPolicy == 2,
+            Permiso::Agregar => $permisos->PolPolicy == 3,
+            Permiso::Ver => $permisos->PolPolicy == 4,                                                    
+             default => false             
+        };            
     }
     /**
      * Summary of render
@@ -99,7 +101,24 @@ class Access extends Model implements MiddlewareHandleInterface
                                         <div class='form-check'>                                            
                                         <input class='form-check-input permisos' type='checkbox' id='id_".$page->ArcID."' value='".$page->ArcID."' />
                                         <label  class='form-check-label' for='id_".$page->ArcID."' >".$page->ArcNombre."</label>
-                                            
+                                            <div class='form-check'>
+                                                <input class='form-check-input' type='radio' name='ArcPermisos_".$page->ArcID."' id='per_View_".$page->ArcID."' value='View'>
+                                                <label class='form-check-label' for='per_View_".$page->ArcID."'>Ver</label>
+                                            </div>
+                                            <div class='form-check'>
+                                                <input class='form-check-input' type='radio' name='ArcPermisos_".$page->ArcID."' id='per_Add_".$page->ArcID."' value='Add'>
+                                                <label class='form-check-label' for='per_Add_".$page->ArcID."'>Agregar</label>
+                                            </div>
+
+                                            <div class='form-check'>
+                                                <input class='form-check-input' type='radio' name='ArcPermisos_".$page->ArcID."' id='per_Edit_".$page->ArcID."' value='Edit'>
+                                                <label class='form-check-label' for='per_Edit_".$page->ArcID."'>Editar</label>
+                                            </div>
+
+                                            <div class='form-check mb-4'>
+                                                <input class='form-check-input' type='radio' name='ArcPermisos_".$page->ArcID."' id='per_Delete_".$page->ArcID."' value='Delete'>
+                                                <label class='form-check-label' for='per_Delete_".$page->ArcID."'>Eliminar</label>
+                                            </div>      
                                         </div>
                                 </li>";
                     
@@ -135,7 +154,7 @@ class Access extends Model implements MiddlewareHandleInterface
     {       
         $aproved = $this->permission($auth["page"]); 
         if(isset($auth["permisos"]))            
-            return $this->addEdit(CurrentUser::getId(), Permiso::from($auth["permisos"]));
+            return $this->addEdit(CurrentUser::getId(),$auth["page"],Permiso::tryFrom($auth["permisos"]));
         return $aproved;       
     }        
 
@@ -151,4 +170,3 @@ class Access extends Model implements MiddlewareHandleInterface
         else return 0;
     }
 }
-

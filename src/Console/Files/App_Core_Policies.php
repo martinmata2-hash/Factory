@@ -2,12 +2,13 @@
 namespace App\Core;
 
 use App\Models\Data\PagesD;
+use App\Models\Data\PoliciesD;
 use Marve\Ela\Core\CurrentUser;
 use Marve\Ela\Core\DotEnv;
 use Marve\Ela\Core\Model;
 use Marve\Ela\MySql\Interfaces\DatabaseInterface;
 
-class Pages extends Model implements DatabaseInterface
+class Policies extends Model implements DatabaseInterface
 {
    
 
@@ -23,8 +24,11 @@ class Pages extends Model implements DatabaseInterface
             $data_base = DotEnv::getDB();
         $this->data_base = $data_base;
         $this->mensaje = array();        
-        parent::__construct($data_base, "archivos");
-                
+        parent::__construct($data_base, "policies");
+        
+        //Inicar tabla
+        $this->createTable(new PoliciesD());
+        $this->updateTable();
     }
 
     public function remove(string $id, string $campo="ArcID",  int $usuario = 0)
@@ -32,15 +36,6 @@ class Pages extends Model implements DatabaseInterface
         if(CurrentUser::isAdmin())
            return  parent::remove($id,$campo,$usuario);
         else return 0;
-    }   
-    
-    public function getModule($module)
-    {
-        $respuesta = $this->get(0,"ArcModulo", "ArcModulo = $module");
-        if (\count($respuesta) > 0)
-            return $respuesta;
-        else
-            return 0;
-    }
+    }           
         
 }

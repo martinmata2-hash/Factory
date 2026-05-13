@@ -1,11 +1,12 @@
 <?php
 
-use Marve\Ela\Controllers\GenericController;
+use App\Controllers\GenericController;
 use Marve\Ela\Core\Session;
 
 /*  Todas las llamadas de ajax se redireccionan de aqui            */
 set_include_path(get_include_path() . PATH_SEPARATOR . realpath(dirname(__FILE__) . "/../../"));
 include_once 'vendor/autoload.php';
+include_once 'init.php';
 try
 {
     $partes = explode("/",$_POST["accion"]);
@@ -25,4 +26,3 @@ catch(Exception $ex)
 {
     print_r($ex);
 }
-

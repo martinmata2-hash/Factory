@@ -49,7 +49,7 @@ $(document).ready(function()
 		var data = 
 		{
 			accion:"Permiso/get",
-			data:{usuario:usuario},
+			data:{PusUsuario:usuario},
 			token:$("#CSRF").val()
 		};
 		
@@ -64,18 +64,41 @@ $(document).ready(function()
 				return false;
 		    }
 		    var permisos = "";
+			var policies = "";
 		    $("input:checkbox").each(function()
 		    {
     			if($(this).is(':checked'))
     				if($(this).val() != "0")
     					permisos += $(this).val()+',';   
 		    });
+			$("input:radio").each(function()
+		    {
+				if($(this).is(':checked'))
+				{
+					if($(this).val() != "0")
+					{
+						var id = $(this).attr("id").split("_");
+						var archivo = id[2];
+						console.log(archivo, permisos);
+						if(permisos.includes(archivo))
+						{
+							policies += $(this).val()+',';   
+						}
+						else
+						{
+							$(this).notify("Selecciona el permiso para el archivo ", "info");
+							return false;
+						}
+					}
+				}
+		    });
 		    permisos = permisos.slice(0,-1);
+			policies = policies.slice(0,-1);
 
-						var data = 
+			var data = 
 				{
 					accion:'Permiso/store',
-					data:{PusUsuario:<?php echo $params["UsuID"]; ?>, PusPermisos:permisos},					
+					data:{PusUsuario:<?php echo $params["UsuID"]; ?>,PusPolicies:policies,PusPermisos:permisos},					
 					token:$('#CSRF').val()
 				};			
 		    return AjaxPeticiones.request("/Dashboard/AJax/Controller.php",data,function(){obtenerpermisos(<?php echo $params["UsuID"];?>);},$("#submitButtonPermisos"));					
@@ -86,22 +109,26 @@ $(document).ready(function()
             $('input:checkbox').prop('checked','');		
         }
         function actualizaTree(response)
-        {                
-        	 $('input:checkbox').prop('checked','');			
-        	var datos = response.PusPermisos.split(',');				
-        	$.each(datos, function(i, value)
-        	{
-        		try
-        		{			
-            		
+        {   
+			$.notify("Permisos cargados", "success");             
+        	$('input:checkbox').prop('checked','');			
+        	var datos = response.PusPermisos.split(',');		
+			$('input:radio').prop('checked','');			
+        	var policies = response.PusPolicies.split(',');
+			for(let i = 0; i < datos.length; i++)
+			{
+				try
+        		{		
+					//alert("#id_"+ policies[i]+"_"+datos[i]);	            		
             		//seleccionar el checkbox que pertenece al permiso				
-        			$("#id_"+ value).prop('checked', true);			
+        			$("#id_"+ datos[i]).prop('checked', true);
+					$("#per_"+policies[i]+"_"+datos[i]).prop('checked', true);		
         		}
         		catch (e)
         		{
         			;
         		}
-        	});	
+			}		        								        	
         					
         }
 
